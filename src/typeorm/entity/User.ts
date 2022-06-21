@@ -17,7 +17,7 @@ export class User extends BaseEntity {
 	@Column({unique: true})
 	email: string;
 	
-	@Column()
+	@Column({select: false})
 	password: string;
 	
 	@Column({default: "user"})
@@ -28,4 +28,10 @@ export class User extends BaseEntity {
 	
 	@Column({enum: ["sliver", "gold", "diamond"], default: "silver"})
 	userStatus: string;
+	
+	@Column({default: 0})
+	followers: number;
+	
+	@Column({default: 0})
+	following: number;
 }
