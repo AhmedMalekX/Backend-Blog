@@ -5,8 +5,21 @@ import * as http from "http";
 import * as path from "path";
 import {makeExecutableSchema} from "@graphql-tools/schema";
 import {loadFilesSync} from "@graphql-tools/load-files";
+import {config} from "dotenv";
+
+config({path: path.join(__dirname, "../", "config.env")});
+
+import {AppDataSource} from "./typeorm/data-source";
 
 export async function startApolloServer() {
+	AppDataSource.initialize()
+		.then(() => {
+			console.log("Connected To Database 🤖");
+		})
+		.catch((err) => {
+			console.error("Error during Connecting To Database", err);
+		});
+	
 	const typeDefs = loadFilesSync(
 		path.join(__dirname, "graphql/typeDefs/**/*.graphql")
 	);

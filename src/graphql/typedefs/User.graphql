@@ -1,0 +1,32 @@
+type User {
+  firstName: String!
+  lastName: String!
+  role: String!
+  email: String!
+  password: String!
+  username: String!
+  profileStatus: Boolean
+  userStatus: String!
+}
+
+type Query {
+  getAllUsers: [User!]!
+  getUser(id: ID!): User!
+}
+
+input RegisterInput {
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
+}
+
+input LoginInput {
+  userMethod: String
+  password: String
+}
+
+type Mutation {
+  register(data: RegisterInput!): User!
+  login(data: LoginInput!): String
+}
