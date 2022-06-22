@@ -7,7 +7,6 @@ import { makeExecutableSchema } from "@graphql-tools/schema";
 import { loadFilesSync } from "@graphql-tools/load-files";
 import { config } from "dotenv";
 import * as cors from "cors";
-import * as cookieSession from "cookie-session";
 import * as cookieParser from "cookie-parser";
 
 config({ path: path.join(__dirname, "../", "config.env") });

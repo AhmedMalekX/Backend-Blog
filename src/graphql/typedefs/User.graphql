@@ -1,39 +1,41 @@
 type User {
-    firstName: String!
-    lastName: String!
-    role: String!
-    email: String!
-    password: String
-    username: String!
-    profileStatus: Boolean
-    userStatus: String!
-    followers: Int!
-    following: Int!
+  id: ID!
+  firstName: String!
+  lastName: String!
+  role: String!
+  email: String!
+  password: String
+  username: String!
+  profileStatus: Boolean
+  userStatus: String!
+  followers: Int!
+  following: Int!
+  posts: [Post]
 }
 
 type Query {
-    getAllUsers: [User!]!
-    getUser(id: ID!): User!
-    getCurrentUser: User
+  getAllUsers: [User!]!
+  getUser(id: ID!): User!
+  getCurrentUser: User
 }
 
 input RegisterInput {
-    firstName: String!
-    lastName: String!
-    email: String!
-    password: String!
+  firstName: String!
+  lastName: String!
+  email: String!
+  password: String!
 }
 
 input LoginInput {
-    userMethod: String
-    password: String
+  userMethod: String
+  password: String
 }
 
 type Token {
-    token: String
+  token: String
 }
 
 type Mutation {
-    register(data: RegisterInput!): Token
-    login(data: LoginInput!): Token
+  register(data: RegisterInput!): Token
+  login(data: LoginInput!): Token
 }
