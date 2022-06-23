@@ -1,0 +1,22 @@
+type Comment {
+    id: ID!
+    body: String!
+    author: User!
+    post: Post!
+    createdAt: String!
+}
+
+type Query {
+    getAllComments: [Comment!]
+    getCommentsByPostId(postId: ID!): [Comment!]
+    getCommentById(id: ID!): Comment
+}
+
+input IComment {
+    body: String!
+    postId: ID!
+}
+
+type Mutation {
+    createComment(data: IComment): Comment!
+}

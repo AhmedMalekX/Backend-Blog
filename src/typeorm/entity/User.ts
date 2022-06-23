@@ -6,6 +6,7 @@ import {
 	OneToMany,
 } from "typeorm";
 import {Post} from "./Post";
+import {Comment} from "./Comment";
 
 @Entity()
 export class User extends BaseEntity {
@@ -42,6 +43,12 @@ export class User extends BaseEntity {
 	@Column({default: 0})
 	following: number;
 	
+	// @Column({default: []})
+	// likes: []
+	
 	@OneToMany(() => Post, (post) => post.author)
 	posts: Post[];
+	
+	@OneToMany(() => Comment, (comment) => comment.author)
+	comments: Comment[]
 }

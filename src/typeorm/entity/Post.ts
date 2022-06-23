@@ -4,13 +4,15 @@ import {
   Column,
   BaseEntity,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { User } from "./User";
+import { Comment } from "./Comment";
 
 @Entity()
 export class Post extends BaseEntity {
   @PrimaryGeneratedColumn()
-  readonly  id: number;
+  readonly id: number;
 
   @Column()
   title: string;
@@ -18,7 +20,7 @@ export class Post extends BaseEntity {
   @Column()
   body: string;
 
-  @Column({default: null})
+  @Column({ default: null })
   imageCover: string;
 
   @Column({ type: "timestamptz", default: new Date() })
@@ -30,6 +32,12 @@ export class Post extends BaseEntity {
   @Column({ type: "timestamptz", default: null })
   lastSeen: Date;
 
+  @Column({ default: 0 })
+  likes: number;
+
   @ManyToOne(() => User, (user) => user.posts)
   author: User;
+
+  @OneToMany(() => Comment, (comment) => comment.post)
+  comments: Comment;
 }
