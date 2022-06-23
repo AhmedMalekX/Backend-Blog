@@ -42,3 +42,10 @@ export interface IComment {
 		postId: number;
 	};
 }
+
+export interface UComment {
+	data: {
+		body: string;
+		commentId: number;
+	};
+}

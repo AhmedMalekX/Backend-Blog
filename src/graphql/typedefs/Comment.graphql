@@ -17,6 +17,13 @@ input IComment {
     postId: ID!
 }
 
+input UComment {
+    body: String!
+    commentId: ID!
+}
+
 type Mutation {
     createComment(data: IComment): Comment!
+    updateComment(data: UComment): Comment!
+    deleteComment(commentId: ID!): Boolean!
 }
