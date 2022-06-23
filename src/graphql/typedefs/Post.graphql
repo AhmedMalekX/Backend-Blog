@@ -17,10 +17,18 @@ type Query {
 input PostInput {
     title: String!
     body: String!
-    authorId: ID!
     imageCover: String
+}
+
+input UPostInput {
+    title: String
+    body: String
+    imageCover: String
+    id: ID!
 }
 
 type Mutation {
     createPost(data: PostInput): Post!
+    updatePost(data: UPostInput): Post!
+    deletePost(id: ID!): Boolean!
 }

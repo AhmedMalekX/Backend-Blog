@@ -10,7 +10,7 @@ import {Post} from "./Post";
 @Entity()
 export class User extends BaseEntity {
 	@PrimaryGeneratedColumn()
-	id: number;
+	readonly id: number;
 	
 	@Column()
 	firstName: string;

@@ -31,7 +31,7 @@ export interface IPost {
   data: {
     title: string;
     body: string;
-    authorId: number;
     imageCover: string;
+    id: number;
   };
 }
