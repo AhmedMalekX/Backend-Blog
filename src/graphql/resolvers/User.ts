@@ -2,7 +2,9 @@ import * as bcrypt from "bcryptjs";
 import {User} from "../../typeorm/entity/User";
 import {LoginInput, RegisterInput} from "../../../type";
 import {loginUser} from "../../helpes/loginUser";
-import {generateToken} from "../../helpes/generateToken";
+import {generateToken, verifyToken} from "../../helpes/generateToken";
+import {sendMail} from "../../helpes/sendMail";
+import {AppDataSource} from "../../typeorm/data-source";
 
 export default {
 	Query: {
@@ -76,6 +78,78 @@ export default {
 			}
 			
 			return await loginUser(userMethod, password, ctx);
+		},
+		forgetPassword: async (_, {email}) => {
+			// check if user exists in database
+			const user = await User.findOne({where: {email}});
+			
+			if (!user) {
+				return;
+			}
+			
+			console.log({user});
+			
+			const token = await generateToken(
+				{id: user.id, email: user.email},
+				"15m"
+			);
+			
+			const receiverEmail = user.email;
+			
+			await sendMail(receiverEmail, "Reset Password", token);
+			
+			return true;
+		},
+		resetPassword: async (_, {token, newPassword}) => {
+			if (!token || !newPassword) {
+				throw new Error("Invalid Data");
+			}
+			
+			const {id} = await verifyToken(token);
+			
+			const user = await AppDataSource.getRepository(User)
+				.createQueryBuilder("user")
+				.where("user.id = :id", {id})
+				.addSelect("user.password")
+				.getOne();
+			
+			user.password = await bcrypt.hash(newPassword, 12);
+			
+			await User.save(user);
+			
+			return true;
+		},
+		updatePassword: async (_, {oldPassword, newPassword}, {user}) => {
+			if (!user) {
+				throw new Error("You must login to update your password");
+			}
+			
+			if (!oldPassword || !newPassword) {
+				throw new Error("Invalid Data");
+			}
+			
+			const fullUserData = await AppDataSource.getRepository(User)
+				.createQueryBuilder("user")
+				.where("user.id = :id", {id: user.id})
+				.addSelect("user.password")
+				.getOne();
+			
+			const matchedPassword = await bcrypt.compare(
+				oldPassword,
+				fullUserData.password
+			);
+			
+			if (!matchedPassword) {
+				throw new Error("Wrong Password !!");
+			}
+			
+			// console.log({user})
+			
+			fullUserData.password = await bcrypt.hash(newPassword, 12);
+			
+			await User.save(fullUserData);
+			
+			return true;
 		},
 	},
 };
